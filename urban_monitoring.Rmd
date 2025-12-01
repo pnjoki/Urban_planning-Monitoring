@@ -103,7 +103,7 @@ ndviMap <- tm_shape(ndvi) +
   tm_credits("Date: 22 November 2025",
              position = c("left", "bottom"),
              size = 0.5) +
-  tm_credits("Author: Ayoola John Oluwafemi",
+  tm_credits("Author: Paul Gitonga Njoki",
              fontface = "italic",
              position = c("left", "bottom"),
              size = 0.5)+
@@ -131,7 +131,7 @@ GVIMap <- tm_shape(GVI) +
   tm_credits("Date: 22 November 2025",
              position = c("left", "bottom"),
              size = 0.5) +
-  tm_credits("Author: Ayoola John Oluwafemi",
+  tm_credits("Author: Paul Gitonga Njoki",
              fontface = "italic",
              position = c("left", "bottom"),
              size = 0.5) +
@@ -159,7 +159,7 @@ mndwiMap <- tm_shape(mndwi) +
   tm_credits("Date: 22 November 2025",
              position = c("left", "bottom"),
              size = 0.5) +
-  tm_credits("Author: Ayoola John Oluwafemi",
+  tm_credits("Author: Paul Gitonga Njoki",
              fontface = "italic",
              position = c("left", "bottom"),
              size = 0.5) +
