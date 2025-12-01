@@ -1,0 +1,210 @@
+---
+title: "River"
+reauthor: "paul"
+date: "2025-12-01"
+output: word_document
+---
+
+```{r}
+#----------------------------------------------------
+#INSTALL NECESSARY PACKAGES
+
+# Go through this section if you haven't installed 
+# these packages.
+#----------------------------------------------------
+
+# install.packages(“terra”)
+# install.packages(“sf”)
+# install.packages(“tmap”)
+```
+
+
+#----------------------------------------------------
+# SETTING UP THE ENVIRONMENT
+#----------------------------------------------------
+
+```{r}
+# 1. Set working directory ---- 
+setwd("C:/Users/Pro/Downloads/data") # Change the file path to your working directory
+getwd() # check the file path of the current directory
+```
+
+
+```{r}
+# 2. Load packages ----
+library(sf)
+library(terra)
+library(tmap)
+```
+
+#----------------------------------------------------
+# RASTER DATA EXPLORATION
+#----------------------------------------------------.
+```{r}
+# 3. Import/read data -----
+b1 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B01.tiff")
+b2 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B02.tiff")
+b3 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B03.tiff")
+b4 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B04.tiff")
+b5 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B05.tiff")
+b6 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B06.tiff")
+b7 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B07.tiff")
+b8 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B08.tiff")
+b8a <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B8A.tiff")
+b9 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B09.tiff")
+b11 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B11.tiff")
+b12 <- rast("C:/Users/Pro/Downloads/data/bt_images/Sentinel-2_L2A_B12.tiff")
+```
+# Sentinel 2 bands
+# Band 1: Coastal aerosol
+# Band 2: Blue
+# Band 3: Green
+# Band 4: Red
+# Band 5: Vegetation Red Edge
+# Band 6: Vegetation Red Edge
+# Band 7: Vegetation Red Edge
+# Band 8: NIR
+# Band 8A: Vegetation Red Edge
+# Band 9: Water Vapour
+# Band 10: SWIR-Cirrus
+# Band 11 - SWIR
+# Band 12 - SWIR
+
+# #----------------------------------------------------
+# # RASTER DATA MANIPULATION
+# #----------------------------------------------------
+
+# # Calculating Spectral Indices
+
+# # NDVI = (NIR - RED)/(NIR + RED) with values ranging from -1 to 1
+
+```{r}
+ndvi <- ((b8-b4)/(b8 + b4))
+plot(ndvi)
+plot(ndvi, col=rev(terrain.colors(10)), main="Sentinel-NDVI")
+```
+
+```{r}
+# 
+# # Create color palette
+ndviPalette <- c('#FFFFFF', '#CE7E45', '#DF923D', '#F1B555', '#FCD163', '#99B718',
+                 '#74A901', '#66A000', '#529400', '#3E8601', '#207401', '#056201',
+                 '#004C00', '#023B01', '#012E01', '#011D01', '#011301')
+# 
+# 
+ndviMap <- tm_shape(ndvi) + 
+  tm_raster(palette = ndviPalette, title="NDVI", style = "cont") +
+  tm_title("Blantyre City NDVI(10 October 2024)", color = '#011D01', size = 0.9)+
+  tm_credits("Data Source: Copernicus Browser",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Date: 22 November 2025",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Author: Ayoola John Oluwafemi",
+             fontface = "italic",
+             position = c("left", "bottom"),
+             size = 0.5)+
+  tm_graticules(lines=FALSE, col="grey", labels.size = 0.7) +
+  tm_logo("C:/Users/Pro/Downloads/data/r.png", position = c(0.92, 0.99),height=1)
+```
+
+```{r}
+ndviMap
+
+tmap_save(ndviMap, "BT NDVI.png")
+
+#Green Normalized Difference Vegetation Index (GVI)
+GVI <- ((b8-b3)/(b8 + b3))
+plot(GVI)
+
+GVIParams <- c("white", "green")
+
+GVIMap <- tm_shape(GVI) + 
+  tm_raster(palette=GVIParams, title="GVI", style = "cont") +
+  tm_title("Blantyre City GVI (10 October 2024)", color = "green", size = 0.9)+
+  tm_credits("Data Source: Copernicus Browser",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Date: 22 November 2025",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Author: Ayoola John Oluwafemi",
+             fontface = "italic",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_grid(lines = FALSE)+
+  tm_graticules(lines=FALSE, col="grey", labels.size = 0.7) + 
+  tm_logo("C:/Users/Pro/Downloads/data/r.png", position = c(0.92, 0.99),height=1)
+```
+
+```{r}
+GVIMap
+tmap_save(GVIMap, "BT GVI.png")
+
+#Modified Normalised Water Index----
+mndwi <- ((b3 - b11)/(b3 + b11))
+plot(mndwi)
+
+mndwiParams <- c("white", "blue")
+
+mndwiMap <- tm_shape(mndwi) + 
+  tm_raster(palette=mndwiParams, title="MNDWI", style = "cont") +
+  tm_title("Blantyre City MNDWI (10 October 2024)", color = "blue", size = 0.9)+
+  tm_credits("Data Source: Copernicus Browser",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Date: 22 November 2025",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Author: Ayoola John Oluwafemi",
+             fontface = "italic",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_grid(lines = FALSE)+
+  tm_graticules(lines=FALSE, col="grey", labels.size = 0.7) + 
+  tm_logo("C:/Users/Pro/Downloads/data/r.png", position = c(0.92, 0.99),height=1)
+
+mndwiMap
+tmap_save(mndwiMap, "BT MNDWI.png")
+
+
+# Normalised Difference Built-up Index----
+#ndbi = (SWIR - NIR) / (SWIR + NIR)
+ndbi <- ((b11 - b8)/(b11 + b8))
+plot(ndbi)
+
+ndbiParams <- c("white", "red")
+
+ndbiMap <- tm_shape(ndbi) + 
+  tm_raster(palette=ndbiParams, title="NDBI", style = "cont") +
+  tm_title("Blantyre City NDBI(10 October 2024)", color = "brown", size = 0.9)+
+  tm_credits("Data Source: Copernicus Browser",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Date: 22 November 2025",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_credits("Author: Paul Gitonga Njoki",
+             fontface = "italic",
+             position = c("left", "bottom"),
+             size = 0.5) +
+  tm_grid(lines = FALSE)+
+  tm_graticules(lines=FALSE, col="grey", labels.size = 0.7) + 
+  tm_logo("C:/Users/Pro/Downloads/data/r.png", position = c(0.92, 0.99),height=1)
+```
+
+```{r}
+ndbiMap
+
+
+tmap_save(ndbiMap, "BT NDBI.png")
+
+
+par(mfrow = c(2,2))
+plot(ndvi, col = ndviPalette, main = "NDVI")
+plot(GVI, col = GVIParams, main = "GVI")
+plot( mndwi, col = mndwiParams, main = "MNDWI")
+plot(ndbi, col= ndbiParams, main = "NDBI")
+
+```
